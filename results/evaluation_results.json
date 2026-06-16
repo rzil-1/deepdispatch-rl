@@ -1,0 +1,67 @@
+{
+  "DQN (Ours)": {
+    "citations_mean": 1.76,
+    "citations_std": 1.7895250766614028,
+    "cis_collected_mean": 2.2816906452178953,
+    "cis_collected_std": 3.173472492881042,
+    "distance_mean": 4.6,
+    "distance_std": 3.3615472627943217,
+    "coverage_mean": 0.022333333333333334,
+    "coverage_std": 0.01227010821287064,
+    "reward_mean": 18.376573049008847,
+    "reward_std": 36.17835919396448,
+    "efficiency": 0.3826086956521739
+  },
+  "PPO (Ours)": {
+    "citations_mean": 2.04,
+    "citations_std": 2.106751053162191,
+    "cis_collected_mean": 2.4003840523958204,
+    "cis_collected_std": 2.919250194850848,
+    "distance_mean": 4.37,
+    "distance_std": 3.5232229563284805,
+    "coverage_mean": 0.019933333333333334,
+    "coverage_std": 0.013383073887065954,
+    "reward_mean": 18.665507121483483,
+    "reward_std": 35.08628708195477,
+    "efficiency": 0.4668192219679634
+  },
+  "Random Patrol": {
+    "citations_mean": 1.0,
+    "citations_std": 1.2569805089976536,
+    "cis_collected_mean": 1.1353142023086549,
+    "cis_collected_std": 1.6306147828567439,
+    "distance_mean": 1.66,
+    "distance_std": 1.550612782096162,
+    "coverage_mean": 0.015666666666666666,
+    "coverage_std": 0.008556998435328958,
+    "reward_mean": 3.1804751271804172,
+    "reward_std": 18.83879809606963,
+    "efficiency": 0.6024096385542169
+  },
+  "Greedy Nearest": {
+    "citations_mean": 2.04,
+    "citations_std": 2.2579636843846718,
+    "cis_collected_mean": 2.0430921894311904,
+    "cis_collected_std": 2.533205086533889,
+    "distance_mean": 4.45,
+    "distance_std": 3.4216224221851252,
+    "coverage_mean": 0.01633333333333333,
+    "coverage_std": 0.0091104335791443,
+    "reward_mean": 13.680588735918205,
+    "reward_std": 30.454816247617185,
+    "efficiency": 0.4584269662921348
+  },
+  "Fixed Route": {
+    "citations_mean": 1.26,
+    "citations_std": 1.597623234683322,
+    "cis_collected_mean": 1.2160563105344773,
+    "cis_collected_std": 1.5283887568488344,
+    "distance_mean": 1.73,
+    "distance_std": 1.384593803250614,
+    "coverage_mean": 0.014333333333333335,
+    "coverage_std": 0.006691619966628245,
+    "reward_mean": 3.710229807694753,
+    "reward_std": 18.28303639646084,
+    "efficiency": 0.7283236994219653
+  }
+}

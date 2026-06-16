@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+.env
+
+# Data
+# We ignore the raw dataset and processed binaries because they are too large for GitHub
+data/raw/*.csv
+data/processed/*.parquet
+data/processed/*.pkl
+
+# Models and Results logs
+results/dqn_parking_agent.zip
+results/ppo_parking_agent.zip
+results/tb_logs/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+.DS_Store
