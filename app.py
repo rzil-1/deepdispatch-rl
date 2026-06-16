@@ -24,6 +24,14 @@ import json
 import pickle
 import os
 import sys
+import time
+
+try:
+    from stable_baselines3 import PPO
+    from src.rl_environment import ParkingEnforcementEnv
+except ImportError:
+    PPO = None
+    ParkingEnforcementEnv = None
 
 # Add project root to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -157,6 +165,22 @@ def load_results():
     except FileNotFoundError:
         return None
 
+@st.cache_resource
+def load_intel():
+    try:
+        with open('data/processed/congestion_intel.pkl', 'rb') as f:
+            return pickle.load(f)
+    except FileNotFoundError:
+        return None
+
+@st.cache_resource
+def load_ppo_agent():
+    if PPO is None: return None
+    try:
+        return PPO.load('results/ppo_parking_agent')
+    except:
+        return None
+
 
 # =============================================================================
 # Header
@@ -218,12 +242,13 @@ with st.sidebar:
 # =============================================================================
 # Main Content Tabs
 # =============================================================================
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "🗺️ Violation Heatmap", 
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+    "🗺️ Predictive Violation Hotspot Map", 
     "📊 Congestion Analysis",
     "🤖 RL Agent Performance",
     "⏰ Temporal Patterns",
-    "🔬 Deep Dive"
+    "🔬 Deep Dive",
+    "🏃 Live Patrol Animation"
 ])
 
 
@@ -660,6 +685,123 @@ with tab5:
     </div>
     """, unsafe_allow_html=True)
 
+
+# =============================================================================
+# Tab 6: Live Patrol Animation
+# =============================================================================
+with tab6:
+    st.markdown("### 🏃 Live Patrol Animation")
+    st.markdown("Watch the **PPO Agent** execute a simulated 8-hour patrol shift. It dynamically routes to intercept high-CIS violations.")
+    
+    if PPO is None:
+        st.error("⚠️ stable-baselines3 is not installed or failed to import.")
+    else:
+        intel = load_intel()
+        ppo_agent = load_ppo_agent()
+        
+        if intel is None or ppo_agent is None:
+            st.warning("⚠️ Congestion Intelligence or PPO model not found. Please run `python train.py` first.")
+        else:
+            if st.button("🚔 Start 8-Hour Patrol Shift", type="primary"):
+                # Initialize environment
+                env = ParkingEnforcementEnv(
+                    congestion_intel=intel,
+                    adjacency=adjacency,
+                    zone_stats=zone_stats,
+                    shift_length=8
+                )
+                
+                obs, info = env.reset()
+                
+                # Create placeholders
+                st.markdown("#### Shift Status")
+                col_map, col_metrics = st.columns([3, 1])
+                map_placeholder = col_map.empty()
+                metrics_placeholder = col_metrics.empty()
+                
+                agent_path_lats = []
+                agent_path_lons = []
+                total_reward = 0
+                
+                # Run episode
+                terminated, truncated = False, False
+                step_idx = 0
+                
+                while not (terminated or truncated) and step_idx < 9: # 8 steps max
+                    # 1. Update Path
+                    agent_zone = env.zone_list[env.agent_zone_idx]
+                    agent_lat, agent_lon = env.zone_coords[agent_zone]
+                    agent_path_lats.append(agent_lat)
+                    agent_path_lons.append(agent_lon)
+                    
+                    # 2. Extract active violations for map
+                    viol_lats, viol_lons, viol_sizes = [], [], []
+                    for idx, active in enumerate(env.violations_active):
+                        if active > 0:
+                            lat, lon = env.zone_coords[env.zone_list[idx]]
+                            cis = env.violation_cis[idx]
+                            viol_lats.append(lat)
+                            viol_lons.append(lon)
+                            viol_sizes.append(max(8, cis * 4)) # Scale for visibility
+                            
+                    # 3. Create Map
+                    fig = go.Figure()
+                    
+                    # Active Violations Layer
+                    if len(viol_lats) > 0:
+                        fig.add_trace(go.Scattermapbox(
+                            lat=viol_lats, lon=viol_lons, mode='markers',
+                            marker=dict(size=viol_sizes, color='#ff0080', opacity=0.7),
+                            name='Active Violations'
+                        ))
+                    
+                    # Patrol Path Line
+                    if len(agent_path_lats) > 1:
+                        fig.add_trace(go.Scattermapbox(
+                            lat=agent_path_lats, lon=agent_path_lons, mode='lines',
+                            line=dict(width=4, color='#00d2ff'),
+                            name='Patrol Route'
+                        ))
+                        
+                    # Agent Current Position
+                    fig.add_trace(go.Scattermapbox(
+                        lat=[agent_lat], lon=[agent_lon], mode='markers',
+                        marker=dict(size=18, color='#00d2ff', symbol='circle'),
+                        name='AI Officer'
+                    ))
+                    
+                    fig.update_layout(
+                        mapbox_style="carto-darkmatter",
+                        mapbox=dict(
+                            center=dict(lat=12.9716, lon=77.5946),
+                            zoom=11.5
+                        ),
+                        margin={"r":0,"t":0,"l":0,"b":0},
+                        height=500,
+                        template='plotly_dark',
+                        legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01, bgcolor="rgba(0,0,0,0.5)")
+                    )
+                    
+                    # Render map
+                    map_placeholder.plotly_chart(fig, use_container_width=True)
+                    
+                    # Render metrics
+                    with metrics_placeholder.container():
+                        st.metric("Current Time", f"{env.current_hour:02d}:00 IST")
+                        st.metric("Total Citations", info.get('total_citations', 0))
+                        st.metric("CIS Cleared", f"{info.get('total_cis_collected', 0):.1f}")
+                        st.metric("Agent Reward", f"{total_reward:.1f}")
+                    
+                    # 4. Agent takes action
+                    action, _ = ppo_agent.predict(obs, deterministic=True)
+                    obs, reward, terminated, truncated, info = env.step(action)
+                    total_reward += reward
+                    step_idx += 1
+                    
+                    # Wait for animation effect
+                    time.sleep(1.0)
+                    
+                st.success(f"✅ **Shift Complete!** The AI proactively cleared {info.get('total_citations', 0)} high-impact vehicles, preventing {info.get('total_cis_collected', 0):.1f} points of congestion.")
 
 # =============================================================================
 # Footer

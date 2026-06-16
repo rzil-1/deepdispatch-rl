@@ -67,7 +67,7 @@ If the AI wasted time patrolling empty streets or ticketing harmless scooters, i
 | Sub-problem | Status | One-line reason |
 | :--- | :--- | :--- |
 | **Poor visibility** | Fully solved | The dashboard visually groups 298,000 messy historical records into clear, readable grid areas on a map. |
-| **Reactive enforcement** | Partially solved | Our simulation proves that proactive AI patrolling works, but we have not built a mobile app to actually dispatch real human officers yet. |
+| **Reactive enforcement** | Partially solved | The dashboard now features a 'Live Patrol Animation' to visually prove how the AI proactively hunts high-impact violations, but we have not built a mobile app to dispatch real human officers yet. |
 | **No impact heatmap** | Partially solved | We successfully map an educated guess of the impact (vehicle size × road type), but we do not map real-time, live traffic speeds. |
 | **Difficult to prioritize** | Fully solved | The system provides an exact, mathematically ranked list of which grid squares need an officer the most right now. |
 

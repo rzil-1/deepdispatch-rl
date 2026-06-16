@@ -11,7 +11,7 @@ Instead of waiting for traffic jams to happen or blindly patrolling quiet street
 * **Congestion Impact Score (CIS):** A custom mathematical proxy that prioritizes violations based on vehicle weight and road type, ensuring officers target massive trucks on arterial roads instead of scooters in alleys.
 * **Geospatial Hotspot Engine:** Uses 6-character Geohashing and Kernel Density Estimation (KDE) to translate 298K historical records into smooth, predictive hotspot maps.
 * **Reinforcement Learning Dispatch:** An AI agent (trained via PPO) that acts as a virtual patrol officer in a custom `Gymnasium` simulator. It learns a routing policy that clears **18% more actual congestion** than baseline heuristic patrolling.
-* **Interactive Dashboard:** A premium, real-time Streamlit dashboard featuring Folium heatmaps, Plotly metrics, and a deep-dive into the RL agent's performance scorecards.
+* **Interactive Dashboard & Live Animation:** A premium Streamlit dashboard featuring predictive Folium heatmaps, Plotly metrics, and a "Play Shift" animation that dynamically shows the AI officer patrolling the city and clearing active hotspots in real-time.
 
 ---
 

@@ -17,7 +17,7 @@ The prototype processes data through a linear, phased pipeline culminating in th
    * *Output:* `processed_data/congestion_intel.pkl`
 4. **Phase 2 (RL Training):** `train.py` builds the `ParkingEnforcementEnv` (an MDP defined in `src/rl_environment.py`) which acts as the simulator. It trains two RL agents (DQN and PPO) using Stable-Baselines3, then evaluates them against three baselines (Random, Greedy, Fixed-Route).
    * *Outputs:* `results/dqn_parking_agent.zip`, `results/ppo_parking_agent.zip`, `results/evaluation_results.json`
-5. **Phase 3 (Dashboard):** `app.py` loads the parquets, the intelligence PKL, and the results JSON to render an interactive Streamlit application.
+5. **Phase 3 (Dashboard):** `app.py` loads the parquets, the intelligence PKL, the trained PPO agent, and the results JSON to render an interactive Streamlit application with a Live Patrol Animation tab.
 
 ---
 
@@ -126,7 +126,7 @@ def step(self, action: int):
 *Annotation:* `gamma=0.95` means the agent cares about the entire 8-hour shift, not just the next immediate reward. `clip_range=0.2` prevents the policy from updating too aggressively in any single training step, ensuring stability in our highly stochastic environment.
 
 ### `app.py`
-**Purpose:** The interactive Streamlit dashboard. It consumes all artifacts and visualizes the results.
+**Purpose:** The interactive Streamlit dashboard. It consumes all artifacts, visualizes the static results, and hosts a live, animated simulation loop of the PPO agent executing a patrol shift in real-time.
 
 ---
 
