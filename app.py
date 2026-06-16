@@ -231,7 +231,7 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs([
 # Tab 1: Violation Heatmap
 # =============================================================================
 with tab1:
-    st.markdown("### 🗺️ Real-Time Violation Hotspot Map")
+    st.markdown("### 🗺️ Predictive Violation Hotspot Map")
     st.markdown("""
     This map shows **parking violation density** across Bengaluru, weighted by 
     **Congestion Impact Score (CIS)**. Brighter zones = higher enforcement priority.
