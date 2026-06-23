@@ -25,14 +25,11 @@ venv/
 .env
 
 # Data
-# We ignore the raw dataset and processed binaries because they are too large for GitHub
+# We ignore the raw dataset because it is 100MB+ (GitHub limit)
+# We DO NOT ignore processed data/models because they are tiny and needed for Streamlit Cloud deployment!
 data/raw/*.csv
-data/processed/*.parquet
-data/processed/*.pkl
 
-# Models and Results logs
-results/dqn_parking_agent.zip
-results/ppo_parking_agent.zip
+# TensorBoard logs (optional, usually ignored)
 results/tb_logs/
 
 # IDEs
