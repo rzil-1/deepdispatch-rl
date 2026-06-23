@@ -32,6 +32,10 @@ data/raw/*.csv
 # TensorBoard logs (optional, usually ignored)
 results/tb_logs/
 
+# Internal Docs
+docs/PROBLEM_SOLUTION_MAPPING.md
+docs/PROTOTYPE_DEEP_DIVE.md
+
 # IDEs
 .idea/
 .vscode/
