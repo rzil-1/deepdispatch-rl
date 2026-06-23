@@ -33,8 +33,7 @@ data/raw/*.csv
 results/tb_logs/
 
 # Internal Docs
-docs/PROBLEM_SOLUTION_MAPPING.md
-docs/PROTOTYPE_DEEP_DIVE.md
+docs/
 
 # IDEs
 .idea/
