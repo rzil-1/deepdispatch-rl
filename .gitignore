@@ -40,3 +40,7 @@ docs/
 .vscode/
 *.swp
 .DS_Store
+
+*.zip
+*.png
+take_snapshots.py
